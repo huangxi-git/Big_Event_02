@@ -2,6 +2,20 @@ $(function () {
 
     // 调用函数
     getUserInfo();
+
+    // 点击退出按钮
+    let layer = layui.layer;
+    $('#btnLogout').on('click', function () {
+        // layui 框架提供的询问方式
+        layer.confirm('是否确认退出？', { icon: 3, tilte: '提示' }, function (index) {
+            // 清空本地 token
+            localStorage.removeItem('token');
+            // 页面跳转
+            location.href = '/login.html';
+            // 关闭询问框
+            layer.close(index);
+        })
+    })
 });
 
 
@@ -13,12 +27,15 @@ function getUserInfo() {
     $.ajax({
 
         url: '/my/userinfo',
-        headers: {
 
-            Authorization: localStorage.getItem('token') || '',
-        },
+        // 在 baseAPI 验证
+        // headers: {
+
+        //     Authorization: localStorage.getItem('token') || '',
+        // },
+
         success: (res) => {
-            console.log(res);
+            // console.log(res);
             // 请求成功
             if (res.status !== 0) {
                 return layui.layer.msg(res.message);
